@@ -9,9 +9,10 @@ const initialState = {
 
 function appReducer(state, action){
     switch(action.type){
-        case "ADD_SEARCH_RESULT":         
+        case "ADD_SEARCH_RESULT":   
+        console.log(action.searchResultArr)      
             return Object.assign({},state, {
-                searchResultArr : []
+                searchResultArr : action.searchResultArr
             });
     
         case "UPDATE_SEARCH_KEY":            

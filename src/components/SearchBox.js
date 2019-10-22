@@ -15,11 +15,11 @@ class SearchBox extends Component {
     }    
 
     triggerSearch(q){
-        axios.get(`https://api.github.com/search/users?page=1&per_page=1&q=${q}`).then(resp => {                
+        axios.get(`https://api.github.com/search/users?page=1&per_page=10&q=${q}`).then(resp => {                
         
         this.props.totalQueryResult(resp.data.total_count);
         let result = resp.data.items;
-        console.log(result)
+        //console.log(result)
         this.props.addSearchResult(result);
         })
         

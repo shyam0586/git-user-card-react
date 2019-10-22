@@ -2,9 +2,15 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 
 class SearchResultCards extends Component {
-    render() {        
-        
-            return <div></div>
+    render() {         
+         return (
+                <ul>
+                    {this.props.searchResultArr.map(function(git, index){
+                        console.log(index)
+                        return <li key={ index }>{git.login}</li>;
+                      })}
+                </ul>
+            )
             
     }
 }
@@ -12,8 +18,7 @@ class SearchResultCards extends Component {
 
 
 const mapStateToProps = state => ({
-    totalResult: state.totalResult,
-    searchWord: state.searchWord
+    searchResultArr: state.searchResultArr
   });
 
 
