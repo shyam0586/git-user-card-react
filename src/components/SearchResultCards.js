@@ -5,8 +5,6 @@ import { updateCurrentClickCard } from "../actions";
 
 class SearchResultCards extends Component {   
     handleClick(i){
-        console.log(i);
-        console.log("SSS")
         this.props.updateCurrentClickCard(i);
     };
     
