@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 
 class SearchResultPagination extends Component {
-    render() {        
-       
+    render() {               
             return <div></div>
            
     }

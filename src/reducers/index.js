@@ -3,7 +3,8 @@ const initialState = {
     searchWord : '',
     totalResult : 0,
     currentPage : 0,
-    selectedCardNumber : 0    
+    selectedCardNumber : 0,
+    clickedCard : 0 //card on which the user clicks    
 };
 
 
@@ -23,6 +24,11 @@ function appReducer(state, action){
         case "TOTAL_QUERY_RESULT":            
             return Object.assign({}, state, {
                 totalResult : action.totalResult
+            });
+
+        case "UPDATE_CURRENT_CLICKED_CARD":            
+            return Object.assign({}, state, {
+                clickedCard : action.clickedCard
             });
 
         default:

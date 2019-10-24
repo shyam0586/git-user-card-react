@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { updateSearchKey, totalQueryResult, addSearchResult } from "../actions";
 import { connect } from 'react-redux';
 import axios from 'axios';
+import './SearchBox.css';
 
 class SearchBox extends Component { 
     constructor(props) {
@@ -10,26 +11,41 @@ class SearchBox extends Component {
       }
     
     handleChange(event) {
+      if(event.target.value !== ''){
         this.props.updateSearchKey(event.target.value)
         this.triggerSearch(event.target.value);
+      }else{
+        this.resetSearch();
+      }
+        
     }    
-
+    resetSearch(){
+      this.props.totalQueryResult(0);
+      this.props.addSearchResult([]);
+      this.props.updateSearchKey('');
+    }
     triggerSearch(q){
-        axios.get(`https://api.github.com/search/users?page=1&per_page=10&q=${q}`).then(resp => {                
+        axios.get(`https://api.github.com/search/users?page=1&per_page=6&q=${q}`).then(resp => {                
         
         this.props.totalQueryResult(resp.data.total_count);
         let result = resp.data.items;
         //console.log(result)
-        this.props.addSearchResult(result);
-        })
+        Promise.all(result.map(url =>
+          fetch(url.url).then(resp => resp.json())
+        )).then(jsons => {
+           this.props.addSearchResult(jsons);
+        })                  
+      })
         
     }
 
     render() {
         return (
-          <div>
+          <div className="row">
+            <div className = "input-container">
             <input placeholder = "Search Here!" type="text" 
-            onChange = {this.handleChange} />            
+            onChange = {this.handleChange} className = "col-lg-12"/>            
+            </div>
           </div>
         )
     }

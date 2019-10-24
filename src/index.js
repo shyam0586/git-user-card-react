@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import { Provider } from "react-redux";
 import { createStore } from "redux";
 import githubSearchApp from './reducers';
+import 'bootstrap/dist/js/bootstrap.js';
+import 'bootstrap/dist/css/bootstrap.css';
 import './index.css';
 import AppContainer from './containers/AppContainer';
 import * as serviceWorker from './serviceWorker';
