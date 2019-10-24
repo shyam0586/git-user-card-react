@@ -25,7 +25,7 @@ class SearchBox extends Component {
       this.props.updateSearchKey('');
     }
     triggerSearch(q){
-        axios.get(`https://api.github.com/search/users?page=1&per_page=6&q=${q}`).then(resp => {                
+        axios.get(`https://api.github.com/search/users?page=1&q=${q}`).then(resp => {                
         
         this.props.totalQueryResult(resp.data.total_count);
         let result = resp.data.items;
