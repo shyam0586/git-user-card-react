@@ -1,8 +1,9 @@
 const initialState = {
     searchResultArr : [],
+    currentPage : 1,
+    perPageResult : 10, 
     searchWord : '',
-    totalResult : 0,
-    currentPage : 0,
+    totalResult : 0,    
     selectedCardNumber : 0,
     clickedCard : 0 //card on which the user clicks    
 };

@@ -3,6 +3,7 @@ import { updateSearchKey, totalQueryResult, addSearchResult } from "../actions";
 import { connect } from 'react-redux';
 import axios from 'axios';
 import './SearchBox.css';
+import access_token from '../config';
 
 class SearchBox extends Component { 
     constructor(props) {
@@ -24,14 +25,15 @@ class SearchBox extends Component {
       this.props.addSearchResult([]);
       this.props.updateSearchKey('');
     }
+    
     triggerSearch(q){
-        axios.get(`https://api.github.com/search/users?page=1&q=${q}`).then(resp => {                
+        axios.get(`https://api.github.com/search/users?&access_token=${access_token}&page=1&q=${q}`).then(resp => {                
         
         this.props.totalQueryResult(resp.data.total_count);
         let result = resp.data.items;
         //console.log(result)
         Promise.all(result.map(url =>
-          fetch(url.url).then(resp => resp.json())
+          fetch(url.url + '?&access_token=' + access_token).then(resp => resp.json())
         )).then(jsons => {
            this.props.addSearchResult(jsons);
         })                  
@@ -52,6 +54,10 @@ class SearchBox extends Component {
 }
 
 
+const mapStateToProps = state => ({
+  perPageResult: state.perPageResult
+});
+
 
 
 const mapDispatchToProps = {
@@ -60,4 +66,4 @@ const mapDispatchToProps = {
     addSearchResult
    };
    
-export default connect(null, mapDispatchToProps)(SearchBox);
+export default connect(mapStateToProps, mapDispatchToProps)(SearchBox);
