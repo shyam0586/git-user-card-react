@@ -6,8 +6,7 @@ import { updateCurrentClickCard } from "../actions";
 class SearchResultCards extends Component {   
     handleClick(i){
         this.props.updateCurrentClickCard(i);
-    };
-    
+    };    
     render() {     
             
             return (             

@@ -4,13 +4,19 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 import './SearchBox.css';
 import access_token from '../config';
+import AbortablePromise from "promise-abortable";
 
-class SearchBox extends Component { 
+
+class SearchBox extends Component {     
     constructor(props) {
-        super(props);        
+        super(props);              
         this.handleChange = this.handleChange.bind(this);        
+        this.cancel = '';
+        this.promiseCall = '';
       }
+          
     
+
     handleChange(event) {
       if(event.target.value !== ''){
         this.props.updateSearchKey(event.target.value)
@@ -27,21 +33,37 @@ class SearchBox extends Component {
     }
     
     triggerSearch(q){
-        axios.get(`https://api.github.com/search/users?&access_token=${access_token}&page=1&q=${q}`).then(resp => {                
+        if (this.cancel) {
+          // Cancel the previous request before making a new request
+          this.cancel.cancel();
+        }
+        if (this.promiseCall) {
+          // Cancel the previous request before making a new request
+          this.promiseCall.abort();
+        }
+        // Create a new CancelToken
+        this.cancel = axios.CancelToken.source();
         
+        axios.get(`https://api.github.com/search/users?&access_token=${access_token}&page=1&q=${q}`, {
+          cancelToken: this.cancel.token
+        }).then(resp => {  
+                                      
         this.props.totalQueryResult(resp.data.total_count);
-        let result = resp.data.items;
-        //console.log(result)
-        Promise.all(result.map(url =>
+        let result = resp.data.items;                   
+        console.log(resp.data.total_count)
+        
+        this.promiseCall = AbortablePromise.all(result.map(url =>
           fetch(url.url + '?&access_token=' + access_token).then(resp => resp.json())
         )).then(jsons => {
            this.props.addSearchResult(jsons);
-        })                  
-      })
+        })                 
+      }).catch((error) => {
+        console.log(error)
+      });
         
     }
 
-    render() {
+    render() {        
         return (
           <div className="row">
             <div className = "input-container">
