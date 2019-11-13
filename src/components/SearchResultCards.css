@@ -1,0 +1,7 @@
+.cardContainer{
+    min-height:550px;
+}
+
+.card-body{
+    min-height:200px;
+}
