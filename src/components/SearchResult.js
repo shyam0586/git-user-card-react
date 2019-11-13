@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import SearchResultStats from './SearchResultStats';
 import SearchResultCards from './SearchResultCards';
-import SearchResultPagination from './SearchResultPagination';
+import Pagination from './Pagination';
 class SearchResult extends Component {
     render() {  
         return (<div>
                     <SearchResultStats></SearchResultStats>   
                     <SearchResultCards></SearchResultCards>
-                    <SearchResultPagination></SearchResultPagination>
+                    <Pagination></Pagination>
                 </div>)
     }
 }

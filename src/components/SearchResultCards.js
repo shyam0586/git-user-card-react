@@ -12,7 +12,7 @@ class SearchResultCards extends Component {
             return (             
                 <div className = "row">
                     {this.props.searchResultArr.map((git, index) => {                        
-                        return (<div key={index} className="col-lg-4">
+                        return (<div key={index} className="col-lg-3">
                         <img src={git.avatar_url} className="card-img-top" alt="avatar"/>
                         <div className="card-body">
                           <h5 className="card-title">{git.name}</h5>

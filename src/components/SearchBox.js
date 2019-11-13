@@ -43,8 +43,8 @@ class SearchBox extends Component {
         }
         // Create a new CancelToken
         this.cancel = axios.CancelToken.source();
-        
-        axios.get(`https://api.github.com/search/users?&access_token=${access_token}&page=1&q=${q}`, {
+        this.props.addSearchResult([])        
+        axios.get(`https://api.github.com/search/users?&access_token=${access_token}&page=1&q=${q}&per_page=${this.props.perPageResult}`, {
           cancelToken: this.cancel.token
         }).then(resp => {  
                                       

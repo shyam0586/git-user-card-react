@@ -12,3 +12,5 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ### config file
 
 Add a config.js file in src folder and export access_token variable with your generated access token. File will not be present in github folder as it is added to ignore list.
+
+I have added a sample config file to show the contents in the real config file.
