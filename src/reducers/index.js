@@ -18,7 +18,12 @@ function appReducer(state, action){
             return Object.assign({},state, {
                 searchResultArr : action.searchResultArr
             });
-    
+
+        case "CHANGE_CURRENT_PAGE":               
+                return Object.assign({},state, {
+                    currentPage : action.currentPage
+                });
+        
         case "UPDATE_SEARCH_KEY":            
             return Object.assign({},state, {
                 searchWord : action.searchWord

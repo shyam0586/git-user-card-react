@@ -1,5 +1,9 @@
 import React, { Component } from "react";
-import { updateSearchKey, totalQueryResult, addSearchResult } from "../actions";
+import SearchResultStats from './SearchResultStats';
+import SearchResultCards from './SearchResultCards';
+import Pagination from './Pagination';
+
+import { updateSearchKey, totalQueryResult, updateCurrentResultPage, addSearchResult } from "../actions";
 import { connect } from 'react-redux';
 import axios from 'axios';
 import './SearchBox.css';
@@ -15,9 +19,15 @@ class SearchBox extends Component {
         this.promiseCall = '';
       }
           
-    
+      onPageChanged = data => {
+        if(this.props.searchWord !== ''){
+          this.triggerSearch(this.props.searchWord);
+        }
+        
+      }
 
     handleChange(event) {
+      this.resetPaginationToOne();
       if(event.target.value !== ''){
         this.props.updateSearchKey(event.target.value)
         this.triggerSearch(event.target.value);
@@ -25,7 +35,10 @@ class SearchBox extends Component {
         this.resetSearch();
       }
         
-    }    
+    }   
+    resetPaginationToOne(){
+      this.props.updateCurrentResultPage(1)
+    } 
     resetSearch(){
       this.props.totalQueryResult(0);
       this.props.addSearchResult([]);
@@ -44,7 +57,7 @@ class SearchBox extends Component {
         // Create a new CancelToken
         this.cancel = axios.CancelToken.source();
         this.props.addSearchResult([])        
-        axios.get(`https://api.github.com/search/users?&access_token=${access_token}&page=1&q=${q}&per_page=${this.props.perPageResult}`, {
+        axios.get(`https://api.github.com/search/users?&access_token=${access_token}&page=${this.props.currentPage}&q=${q}&per_page=${this.props.perPageResult}`, {
           cancelToken: this.cancel.token
         }).then(resp => {  
                                       
@@ -65,10 +78,17 @@ class SearchBox extends Component {
 
     render() {        
         return (
-          <div className="row">
-            <div className = "input-container">
-            <input placeholder = "Search Here!" type="text" 
-            onChange = {this.handleChange} className = "col-lg-12"/>            
+          <div className = "container">
+            <div className="row">
+              <div className = "input-container">
+                <input placeholder = "Search Here!" type="text" 
+                  onChange = {this.handleChange}  className = "col-lg-12"/>            
+              </div>
+            </div>
+            <div className = "row">            
+              <SearchResultStats></SearchResultStats>   
+              <SearchResultCards></SearchResultCards>
+              <Pagination pageNeighbours={this.props.pageNeighbours} onPageChanged={this.onPageChanged}></Pagination>                
             </div>
           </div>
         )
@@ -77,7 +97,11 @@ class SearchBox extends Component {
 
 
 const mapStateToProps = state => ({
-  perPageResult: state.perPageResult
+  perPageResult: state.perPageResult,
+  currentPage: state.currentPage,
+  totalResult: state.totalResult,
+  pageNeighbours: state.pageNeighbours,
+  searchWord: state.searchWord
 });
 
 
@@ -85,7 +109,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
     updateSearchKey,
     totalQueryResult,
-    addSearchResult
+    addSearchResult,
+    updateCurrentResultPage
    };
    
 export default connect(mapStateToProps, mapDispatchToProps)(SearchBox);

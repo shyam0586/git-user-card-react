@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from "react";
 import { connect } from 'react-redux';
+import { updateCurrentResultPage } from "../actions";
 import './Pagination.css'
 const LEFT_PAGE = 'LEFT';
 const RIGHT_PAGE = 'RIGHT';
@@ -32,7 +33,7 @@ class Pagination extends Component {
   fetchPageNumbers = () => {
 
     const totalPages = Math.ceil(this.props.totalResult / this.props.perPageResult);
-    const currentPage = this.currentPage;
+    const currentPage = this.props.currentPage;
     const pageNeighbours = this.pageNeighbours;
 
     /**
@@ -94,8 +95,7 @@ class Pagination extends Component {
   }
 
   gotoPage = page => {
-    const { onPageChanged = f => f } = this.props;
-
+    const { onPageChanged = f => f } = this.props;    
     const currentPage = Math.max(0, Math.min(page, this.totalPages));
 
     const paginationData = {
@@ -106,6 +106,7 @@ class Pagination extends Component {
     };
 
     this.setState({ currentPage }, () => onPageChanged(paginationData));
+    this.props.updateCurrentResultPage(page)
   }
 
   handleClick = page => evt => {
@@ -127,13 +128,13 @@ class Pagination extends Component {
   render(){
    
     this.totalPages = Math.ceil(this.props.totalResult / this.props.perPageResult);
-    const currentPage  = this.currentPage;
+    const currentPage  = this.props.currentPage;
     const pages = this.fetchPageNumbers();
-    console.log("INSIDE RENDER");
-    console.log(this.totalPages);
-    //console.log(this.currentPage);
-    console.log(this.pageNeighbours);
-    console.log(this.props.totalResult);
+    //console.log("INSIDE RENDER");
+    //console.log(this.totalPages);
+    //console.log(currentPage);
+    //console.log(this.pageNeighbours);
+    //console.log(this.props.totalResult);
     //console.log(this.perPageResult);
     if (!this.props.totalResult || this.totalPages === 1) return null;
 
@@ -185,5 +186,9 @@ const mapStateToProps = state => ({
   });
 
 
-export default connect(mapStateToProps, null)(Pagination);
+const mapDispatchToProps = {
+  updateCurrentResultPage
+ };
+
+export default connect(mapStateToProps, mapDispatchToProps)(Pagination);
 
