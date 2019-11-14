@@ -2,7 +2,7 @@ const initialState = {
     searchResultArr : [],
     currentPage : 1,
     totalPages: 0,
-    pageNeighbours : 0,
+    pageNeighbours : 1,
     perPageResult : 12, 
     searchWord : '',
     totalResult : null,    
@@ -24,7 +24,7 @@ function appReducer(state, action){
                 searchWord : action.searchWord
             });
         
-        case "TOTAL_QUERY_RESULT":            
+        case "TOTAL_QUERY_RESULT":        
             return Object.assign({}, state, {
                 totalResult : action.totalResult
             });

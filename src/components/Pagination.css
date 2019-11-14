@@ -1,0 +1,23 @@
+ul.pagination {
+    margin-top: 0;
+    margin-bottom: 0;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+ul.pagination li.page-item.active a.page-link{
+    color: saturate(darken(#c3d4da, 50%), 5%) !important;
+    background-color: saturate(lighten(#c3d4da, 7.5%), 2.5%) !important;
+    border-color: $base-color !important;
+}
+
+a.page-link {
+    padding: 0.75rem 1rem;
+    min-width: 3.5rem;
+    text-align: center;
+    box-shadow: none !important;
+    border-color: #c3d4da !important;
+    font-weight: 900;
+    font-size: 1rem;
+}
+a.page-link:hover {
+    background-color: lighten(desaturate(#c3d4da, 50%), 12.5%);
+}

@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from "react";
 import { connect } from 'react-redux';
-
+import './Pagination.css'
 const LEFT_PAGE = 'LEFT';
 const RIGHT_PAGE = 'RIGHT';
 
@@ -24,15 +24,16 @@ const range = (from, to, step = 1) => {
 
 class Pagination extends Component {  
   constructor(props){
-    super(props);    
-    this.totalPages=0;
+    super(props);        
+    this.currentPage = 1;
+    this.totalPages = 0; 
+    this.pageNeighbours = this.props.pageNeighbours; 
   }
-
   fetchPageNumbers = () => {
 
-    const totalPages = this.totalPages;
-    const currentPage = this.props.currentPage;
-    const pageNeighbours = this.props.pageNeighbours;
+    const totalPages = Math.ceil(this.props.totalResult / this.props.perPageResult);
+    const currentPage = this.currentPage;
+    const pageNeighbours = this.pageNeighbours;
 
     /**
      * totalNumbers: the total page numbers to show on the control
@@ -88,22 +89,99 @@ class Pagination extends Component {
 
   }
   
-  render(){
-    this.totalPages = Math.ceil(this.props.totalResult / this.props.perPageResult);            
-    return (<Fragment>
-      rrr
-      {this.totalPages}
-    </Fragment>)
+  componentDidMount() {
+    this.gotoPage(1);
   }
 
-}
+  gotoPage = page => {
+    const { onPageChanged = f => f } = this.props;
 
-const mapStateToProps = state => ({
-    totalResult: state.totalResult,
+    const currentPage = Math.max(0, Math.min(page, this.totalPages));
+
+    const paginationData = {
+      currentPage,
+      totalPages: this.totalPages,
+      pageLimit: this.props.perPageResult,
+      totalRecords: this.props.totalResult
+    };
+
+    this.setState({ currentPage }, () => onPageChanged(paginationData));
+  }
+
+  handleClick = page => evt => {
+    evt.preventDefault();
+    this.gotoPage(page);
+  }
+
+  handleMoveLeft = evt => {
+    evt.preventDefault();
+    this.gotoPage(this.state.currentPage - (this.pageNeighbours * 2) - 1);
+  }
+
+  handleMoveRight = evt => {
+    evt.preventDefault();
+    this.gotoPage(this.state.currentPage + (this.pageNeighbours * 2) + 1);
+  }
+
+  
+  render(){
+   
+    this.totalPages = Math.ceil(this.props.totalResult / this.props.perPageResult);
+    const currentPage  = this.currentPage;
+    const pages = this.fetchPageNumbers();
+    console.log("INSIDE RENDER");
+    console.log(this.totalPages);
+    //console.log(this.currentPage);
+    console.log(this.pageNeighbours);
+    console.log(this.props.totalResult);
+    //console.log(this.perPageResult);
+    if (!this.props.totalResult || this.totalPages === 1) return null;
+
+    return (
+      <Fragment>
+        <nav aria-label="GithubUser Pagination">
+          <ul className="pagination">
+            { pages.map((page, index) => {
+
+              if (page === LEFT_PAGE) return (
+                <li key={index} className="page-item">
+                  <a className="page-link" href="/#" aria-label="Previous" onClick={this.handleMoveLeft}>
+                    <span aria-hidden="true">&laquo;</span>
+                    <span className="sr-only">Previous</span>
+                  </a>
+                </li>
+              );
+
+              if (page === RIGHT_PAGE) return (
+                <li key={index} className="page-item">
+                  <a className="page-link" href="/#" aria-label="Next" onClick={this.handleMoveRight}>
+                    <span aria-hidden="true">&raquo;</span>
+                    <span className="sr-only">Next</span>
+                  </a>
+                </li>
+              );
+
+              return (
+                <li key={index} className={`page-item${ currentPage === page ? ' active' : ''}`}>
+                  <a className="page-link" href="/#" onClick={ this.handleClick(page) }>{ page }</a>
+                </li>
+              );
+
+            }) }
+
+          </ul>
+        </nav>
+      </Fragment>
+    );
+  }
+
+  }
+
+
+const mapStateToProps = state => ({    
     currentPage: state.currentPage,
-    perPageResult: state.perPageResult,
-    pageNeighbours: state.pageNeighbours
-    
+    totalResult: state.totalResult,
+    perPageResult: state.perPageResult    
   });
 
 

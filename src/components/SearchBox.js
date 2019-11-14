@@ -50,7 +50,7 @@ class SearchBox extends Component {
                                       
         this.props.totalQueryResult(resp.data.total_count);
         let result = resp.data.items;                   
-        console.log(resp.data.total_count)
+        //console.log(resp.data.total_count)
         
         this.promiseCall = AbortablePromise.all(result.map(url =>
           fetch(url.url + '?&access_token=' + access_token).then(resp => resp.json())
