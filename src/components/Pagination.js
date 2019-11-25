@@ -22,7 +22,6 @@ const range = (from, to, step = 1) => {
 }
 
 
-
 class Pagination extends Component {  
   constructor(props){
     super(props);        
@@ -125,19 +124,11 @@ class Pagination extends Component {
   }
 
   
-  render(){
-   
+  render(){   
     this.totalPages = Math.ceil(this.props.totalResult / this.props.perPageResult);
     const currentPage  = this.props.currentPage;
     const pages = this.fetchPageNumbers();
-    //console.log("INSIDE RENDER");
-    //console.log(this.totalPages);
-    //console.log(currentPage);
-    //console.log(this.pageNeighbours);
-    //console.log(this.props.totalResult);
-    //console.log(this.perPageResult);
     if (!this.props.totalResult || this.totalPages === 1) return null;
-
     return (
       <Fragment>
         <nav aria-label="GithubUser Pagination">
@@ -175,9 +166,7 @@ class Pagination extends Component {
       </Fragment>
     );
   }
-
   }
-
 
 const mapStateToProps = state => ({    
     currentPage: state.currentPage,
