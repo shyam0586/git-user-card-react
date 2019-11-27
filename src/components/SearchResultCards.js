@@ -1,19 +1,20 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { updateCurrentClickCard } from "../actions";
+import { updateCurrentClickCard } from '../actions';
 import './SearchResultCards.css';
 
-class SearchResultCards extends Component {   
-    handleClick(i){
-        this.props.updateCurrentClickCard(i);
-    };    
-    render() {     
-            
-            return (             
-                <div className = "row">
-                    {this.props.searchResultArr.map((git, index) => {                        
-                        return (<div key={index} className="cardContainer col-lg-3">
-                        <img src={git.avatar_url} className="card-img-top" alt="avatar"/>
+class SearchResultCards extends Component {
+  handleClick(i) {    
+    this.props.updateCurrentClickCard(i);
+  }
+
+  render() {
+    return (
+      <div className="row">
+        {this.props.searchResultArr.map((git, index) => {                        
+        return (
+          <div key={index} className="cardContainer col-lg-3">
+            <img src={git.avatar_url} className="card-img-top" alt="avatar"/>
                         <div className="card-body">
                           <h5 className="card-title">{git.name}</h5>
                           <p className="card-text"><b>Company</b> : {git.company}</p>

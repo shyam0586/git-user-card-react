@@ -1,2 +1,2 @@
-let access_token="Access token value";
-export default access_token;
+const accessToken = 'Access token value';
+export default accessToken;

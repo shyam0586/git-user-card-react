@@ -1,23 +1,24 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import axios from 'axios';
+import AbortablePromise from 'promise-abortable';
 import SearchResultStats from './SearchResultStats';
 import SearchResultCards from './SearchResultCards';
 import Pagination from './Pagination';
-
-import { updateSearchKey, totalQueryResult, updateCurrentResultPage, addSearchResult } from "../actions";
-import { connect } from 'react-redux';
-import axios from 'axios';
+import {
+  updateSearchKey, totalQueryResult, updateCurrentResultPage, addSearchResult,
+} from '../actions';
 import './SearchBox.css';
-import access_token from '../config';
-import AbortablePromise from "promise-abortable";
+import accessToken from '../config';
 
 
-class SearchBox extends Component {     
-    constructor(props) {
-        super(props);              
-        this.handleChange = this.handleChange.bind(this);        
-        this.cancel = '';
-        this.promiseCall = '';
-      }
+class SearchBox extends Component {
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+    this.cancel = '';
+    this.promiseCall = '';
+  }
           
       onPageChanged = data => {
         if(this.props.searchWord !== ''){
@@ -57,14 +58,13 @@ class SearchBox extends Component {
         // Create a new CancelToken
         this.cancel = axios.CancelToken.source();
         this.props.addSearchResult([])        
-        axios.get(`https://api.github.com/search/users?&access_token=${access_token}&page=${this.props.currentPage}&q=${q}&per_page=${this.props.perPageResult}`, {
+        axios.get(`https://api.github.com/search/users?&access_token=${accessToken}&page=${this.props.currentPage}&q=${q}&per_page=${this.props.perPageResult}`, {
           cancelToken: this.cancel.token
         }).then(resp => {  
                                       
         this.props.totalQueryResult(resp.data.total_count);
         let result = resp.data.items;                   
-        //console.log(resp.data.total_count)
-        
+              
         this.promiseCall = AbortablePromise.all(result.map(url =>
           fetch(url.url + '?&access_token=' + access_token).then(resp => resp.json())
         )).then(jsons => {
